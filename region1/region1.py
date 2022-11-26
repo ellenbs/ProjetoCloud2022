@@ -87,9 +87,9 @@ while exit == False:
             if decision_username == "Y":
                 acoes = []
                 recursos = []
-                restrictions = input("Digite o nome da restrição: \n")
-                action = input("Digite as ações da restrição(e.g. ec2:DescribeInstances, ec2:DescribeRegions): \n")
-                resource = input("Enter resources you want to restrict separated by commas (e.g. arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890abcdef0, arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890abcdef1): \n")
+                restrictions = input("Digite o nome da restrição: ")
+                action = input("\nDigite as ações da restrição(e.g. ec2:DescribeInstances, ec2:DescribeRegions): \n")
+                resources = input("\nColoque os recursos que deseja: ")
                 list_actions = acoes.split(",")
                 list_resources = recursos.split(",")
                 dicionario["users"].append({"username": username, "restrictions": {"restriction_name": restrictions, "actions": list_actions, "resources": list_resources}})
