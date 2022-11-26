@@ -44,9 +44,5 @@ export AWS_SECRET_ACCESS_KEY= {SECRET_ACCESS_KEY}
 
 ----
 ```shell
-terraform plan -out "tfplan.out" -var-file="my.tfvars.json"
-```
-
-```shell
-terraform apply "tfplan.out"
+pyhton main.py
 ```
