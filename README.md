@@ -44,5 +44,5 @@ export AWS_SECRET_ACCESS_KEY= {SECRET_ACCESS_KEY}
 
 ----
 ```shell
-pyhton main.py
+python main.py
 ```
