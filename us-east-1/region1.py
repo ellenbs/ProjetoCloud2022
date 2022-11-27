@@ -3,6 +3,7 @@ import os
 import boto3
 from dotenv import load_dotenv
 import time
+import functions
 
 load_dotenv()   
 ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY_ID")
@@ -21,12 +22,6 @@ class style():
     WHITE = '\033[37m'
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
-
-session = boto3.Session(
-    aws_access_key_id = ACCESS_KEY,
-    aws_secret_access_key = SECRET_KEY,
-    region_name='us-east-1'
-)
 
 ec2_client = session.client('ec2')
 ec2_iam = session.client('iam')

@@ -2,6 +2,8 @@ import os
 import boto3
 import json
 from dotenv import load_dotenv
+import functions
+import time
 
 load_dotenv()   
 ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY_ID")
@@ -20,30 +22,88 @@ class style():
     WHITE = '\033[37m'
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
+    
+global variaveis
+global aws_users
+global instances
+global username
+global region
+    
+variaveis = {"instances" : {},  "security_groups" : {}, "security_group_instances": {}, "aws_region" : ""}
+aws_users = {"aws_user_name" : []}
+instances = []
+username = ""
+region = ""
 
 print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
-print("Para criar uma VPC precisaremos de algumas infos:\n")
-print("Regiões disponíveis:")
-print(style.CYAN + "(1)" + style.WHITE + " us-east-1")
-print(style.CYAN + "(2)" + style.WHITE + " us-east-2\n")
+print("Bem Vindo ao Programa! Vamos Começar?\n")
+regiao_escolhida = functions.escolhe_regiao()
 
-regiao = False
-region = int(input(style.CYAN +  "Digite a região escolhida: " + style.WHITE))
-while regiao == False:
-    if region == 1:
-        print(style.MAGENTA + "\nPreparando Ambiente...")
-        os.chdir("region1")
-        os.system("python3 region1.py")
-        regiao = True
-    elif region == 2:
-        print(style.MAGENTA +  "\nPreparando Ambiente..")
-        os.chdir("region2")
-        os.system("python3 region2.py")
-        regiao = True
-    else:
-        print("Regiões disponíveis:")
-        print(style.CYAN + "(1)" + style.WHITE + " us-east-1")
-        print(style.CYAN + "(2)" + style.WHITE + " us-east-2\n")
-        print("Insira o número corretamente\n")
-        region = input("Digite a região escolhida: ")
-        regiao = False
+exit = False
+while exit == False:
+    
+    print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+    print(style.WHITE + "Estamos trabalhando na Região " + style.CYAN + 
+          "{0}".format(regiao_escolhida) + style.WHITE + ". Opções:\n")
+
+    print(style.CYAN + "(1)" + style.WHITE + " Criar Usuário")
+    print(style.CYAN + "(2)" + style.WHITE + " Criar Instância e Security Group")
+    print(style.CYAN + "(3)" + style.WHITE + " Iniciar Instancia")
+    print(style.CYAN + "(4)" + style.WHITE + " Parar Instancia")
+    print(style.CYAN + "(5)" + style.WHITE + " Deletar Instância e Security Group")
+    print(style.CYAN + "(6)" + style.WHITE + " Listar Instraestrutura")
+    print(style.CYAN + "(7)" + style.WHITE + " Subir mudanças no terraform")
+    print(style.CYAN + "(8)" + style.WHITE + " Sair\n")
+    
+    escolha = input(style.CYAN + "Digite a opção escolhida: " + style.WHITE)
+    time.sleep(1)
+    
+    while escolha != "1" and escolha != "2" and escolha != "3" and escolha != "4" and escolha != "5" and escolha != "6" and escolha != "7" and escolha != "8":
+        print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n") 
+        print(style.WHITE + "\nEstamos trabalhando na Região " + style.CYAN + 
+          "{0}".format(regiao_escolhida) + style.WHITE + ". Opções:\n")
+
+        print(style.CYAN + "(1)" + style.WHITE + " Criar Usuário")
+        print(style.CYAN + "(2)" + style.WHITE + " Criar Instância e Security Group")
+        print(style.CYAN + "(3)" + style.WHITE + " Iniciar Instancia")
+        print(style.CYAN + "(4)" + style.WHITE + " Parar Instancia")
+        print(style.CYAN + "(5)" + style.WHITE + " Deletar Instância e Security Group")
+        print(style.CYAN + "(6)" + style.WHITE + " Listar Instraestrutura")
+        print(style.CYAN + "(7)" + style.WHITE + " Subir mudanças no terraform")
+        print(style.CYAN + "(8)" + style.WHITE + " Sair\n")
+        
+        escolha = input(style.RED + "Número não aceito. " + style.CYAN + "Digite novamente a opção escolhida: " + style.WHITE)
+        time.sleep(1)
+        
+    if escolha == "1":
+        functions.cria_usuario()
+        time.sleep(2)
+    elif escolha == "2":
+        functions.cria_instancia(regiao_escolhida)
+        time.sleep(2)
+    elif escolha == "3":
+        functions.inicia_instancia(None, None, regiao_escolhida)
+        time.sleep(2)
+    elif escolha == "4":
+        functions.para_instancia(None, None, regiao_escolhida)
+        time.sleep(2)
+    elif escolha == "5":
+        functions.deletar_recursos()
+        time.sleep(2)
+    elif escolha == "6":
+        functions.listar_recuros(regiao_escolhida)
+        time.sleep(2)
+    elif escolha == "7":
+        functions.sobe_terraform() 
+        time.sleep(2)
+    elif escolha == "8":
+        print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+        print("Terminando Processos...")
+        print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+        time.sleep(2)
+        exit = True
+    
+    
+    
+    
+    
