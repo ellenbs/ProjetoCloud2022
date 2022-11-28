@@ -511,7 +511,6 @@ def listar_recuros(region):
                 user['Arn'],
                 )
             )
-    
 
 # ------------------------------------------------------------------------ MUDANCAS TERRAFORM
 

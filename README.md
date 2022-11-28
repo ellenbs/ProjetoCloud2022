@@ -32,17 +32,38 @@ Para demais configurações consultar [Terraform](https://developer.hashicorp.co
 
 Configurando AWS para usar o Terraform. Isso deve ser feito a partir da [AWS Command Line Interface](https://aws.amazon.com/pt/cli/).
 
-Nesse passo devem ser inseridas as IAM credentials (Access Key e Secret Access Key) para autenticar o Terraform AWS provider, por meio de variáveis de ambiente.
+Nesse passo devem ser inseridas as IAM credentials (Access Key e Secret Access Key) para autenticaçāo do nosso ambiente.
 
 ```shell
 export AWS_ACCESS_KEY_ID= {ACCESS_KEY}
 
 export AWS_SECRET_ACCESS_KEY= {SECRET_ACCESS_KEY}
 ```
+:warning: Nunca deixe suas credenciais públicas, faça uso de variáveis de ambiente locais e do AWS CLI.
+----
+## Iniciando o Projeto :grin:
 
-**WARNING:** Nunca deixe suas credenciais públicas, faça uso de variáveis de ambiente locais e do AWS CLI.
+Agora que temos nosso ambiente pronto, podemos clonar o repositório e começar a mexer!
+
+```shell
+git clone https://github.com/ellenbs/ProjetoCloud2022
+```
+
+A Página Principal vai te informar duas opções de região: us-east-1 (Norte da Virgínia) e us-west-2 (Norte da Califórnia). Sinta-se a vontade para escolher qualquer uma!
+
+A próxima página terá as seguintes funcionalidades:
+
+1. Criar Usuário
+2. Criar Instância e Security Group
+3. Iniciar Instancia
+4. Parar Instancia
+5. Deletar Recursos
+6. Listar Instraestrutura
+7. Subir mudanças no terraform
+8. Sair
 
 ----
-```shell
-python main.py
-```
+### Agora que sabemos como navegar no projeto podemos rodar:
+`python main.py` ou `python3 main.py`
+
+
