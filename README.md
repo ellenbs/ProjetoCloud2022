@@ -1,4 +1,4 @@
-# Projeto Cloud 2022
+# Projeto Cloud 2022 
 
 ### Aluna:
 
@@ -41,7 +41,7 @@ export AWS_SECRET_ACCESS_KEY= {SECRET_ACCESS_KEY}
 ```
 :warning: Nunca deixe suas credenciais públicas, faça uso de variáveis de ambiente locais e do AWS CLI.
 
-Também precisaremos de uma chave pública da AWS, então na aba de Key Pairs, crie um novo par de chaves e coloque nas pastas das regiões.
+Também precisaremos de uma chave pública da AWS, então na aba de Key Pairs, crie um novo par de chaves e coloque nas pastas das regiões. (arquivo como "public_key")
 
 ----
 ## Iniciando o Projeto :grin:
