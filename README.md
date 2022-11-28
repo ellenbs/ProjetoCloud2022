@@ -55,6 +55,7 @@ git clone https://github.com/ellenbs/ProjetoCloud2022
 A Página Principal vai te informar duas opções de região: us-east-1 (Norte da Virgínia) e us-west-2 (Norte da Califórnia). Sinta-se a vontade para escolher qualquer uma!
 
 A próxima página terá as seguintes funcionalidades:
+- Lembrando que para encontrar os ids das instâncias, podemos checar o aqruivo instances.txt na pasta de cada região
 
 1. Criar Usuário
 2. Criar Instância e Security Group
