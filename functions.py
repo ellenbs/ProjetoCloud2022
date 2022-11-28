@@ -514,12 +514,17 @@ def listar_recuros(region):
 
 # ------------------------------------------------------------------------ MUDANCAS TERRAFORM
 
+def sobe_user_terraform(region):
+    print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+    print("Vamos subir os Users no Terraform")
+    os.system("cd ./aws_users && terraform init && terraform  plan && terraform apply")
+    print(style.RED + "Não esqueça de salvar a sua senha!")
+    
 def sobe_terraform(region):
     global arquivo
     print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     print("Vamos subir as mudanças no Terraform")
     arquivo = f'.auto-{region}.tfvars.json'
-    os.system("cd ./aws_users && terraform init && terraform  plan && terraform apply")
     os.system(f'cd ./{region} && terraform init && terraform  plan -var-file={arquivo} && terraform apply -var-file={arquivo}')
     
 # ------------------------------------------------------------------------ FUNCOES DE USO

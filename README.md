@@ -59,8 +59,9 @@ A próxima página terá as seguintes funcionalidades:
 4. Parar Instancia
 5. Deletar Recursos
 6. Listar Instraestrutura
-7. Subir mudanças no terraform
-8. Sair
+7. Subir Users no terraform
+8. Subir mudanças no terraform
+9. Sair
 
 ----
 ### Agora que sabemos como navegar no projeto podemos rodar:

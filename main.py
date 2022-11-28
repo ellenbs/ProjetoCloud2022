@@ -52,13 +52,14 @@ while exit == False:
     print(style.CYAN + "(4)" + style.WHITE + " Parar Instancia")
     print(style.CYAN + "(5)" + style.WHITE + " Deletar Recursos")
     print(style.CYAN + "(6)" + style.WHITE + " Listar Instraestrutura")
-    print(style.CYAN + "(7)" + style.WHITE + " Subir mudanças no terraform")
-    print(style.CYAN + "(8)" + style.WHITE + " Sair\n")
+    print(style.CYAN + "(7)" + style.WHITE + " Subir Users no terraform")
+    print(style.CYAN + "(8)" + style.WHITE + " Subir mudanças no terraform")
+    print(style.CYAN + "(9)" + style.WHITE + " Sair\n")
     
     escolha = input(style.CYAN + "Digite a opção escolhida: " + style.WHITE)
     time.sleep(1)
     
-    while escolha != "1" and escolha != "2" and escolha != "3" and escolha != "4" and escolha != "5" and escolha != "6" and escolha != "7" and escolha != "8":
+    while escolha != "1" and escolha != "2" and escolha != "3" and escolha != "4" and escolha != "5" and escolha != "6" and escolha != "7" and escolha != "8" and escolha != "9":
         print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n") 
         print(style.WHITE + "\nEstamos trabalhando na Região " + style.CYAN + 
           "{0}".format(regiao_escolhida) + style.WHITE + ". Opções:\n")
@@ -69,8 +70,9 @@ while exit == False:
         print(style.CYAN + "(4)" + style.WHITE + " Parar Instancia")
         print(style.CYAN + "(5)" + style.WHITE + " Deletar Recursos")
         print(style.CYAN + "(6)" + style.WHITE + " Listar Instraestrutura")
-        print(style.CYAN + "(7)" + style.WHITE + " Subir mudanças no terraform")
-        print(style.CYAN + "(8)" + style.WHITE + " Sair\n")
+        print(style.CYAN + "(7)" + style.WHITE + " Subir Users no terraform")
+        print(style.CYAN + "(8)" + style.WHITE + " Subir mudanças no terraform")        
+        print(style.CYAN + "(9)" + style.WHITE + " Sair\n")
         
         escolha = input(style.RED + "Número não aceito. " + style.CYAN + "Digite novamente a opção escolhida: " + style.WHITE)
         time.sleep(1)
@@ -94,9 +96,11 @@ while exit == False:
         functions.listar_recuros(regiao_escolhida)
         time.sleep(2)
     elif escolha == "7":
-        functions.sobe_terraform(regiao_escolhida) 
+        functions.sobe_user_terraform(regiao_escolhida) 
         time.sleep(2)
     elif escolha == "8":
+        functions.sobe_terraform()
+    elif escolha == "9":
         print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
         print("Terminando Processos...")
         print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
