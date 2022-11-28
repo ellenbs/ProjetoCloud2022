@@ -10,44 +10,61 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  region = var.aws_region
 }
-
-resource "aws_vpc" "vpc_east_1" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_hostnames = true
+   
+resource "aws_vpc" "main" {
+  cidr_block       =    var.vpc_cidr_block        
+  instance_tenancy = "default"
 
   tags = {
-    Name = "vpc_east_1"
+    name = "VPC_certa${var.aws_region}"
   }
 }
 
-resource "aws_subnet" "vpc_east_1_subnet" {
-  vpc_id     = aws_vpc.vpc_east_1.id
-  cidr_block = "10.0.1.0/24"
+resource "aws_subnet" "main" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = cidrsubnet(aws_vpc.main.cidr_block, 8, 1)
+  map_public_ip_on_launch = true
 
   tags = {
-    Name = "subnet_east_1"
+    Name = "Subnet"
   }
 }
-
-resource "aws_security_group" "security_group" {
-  for_each = var.security_groups
-  name        = each.value.security_name
-  description = each.value.security_description
-  vpc_id      = aws_vpc.vpc_east_1.id
-}
-
-resource "aws_instance" "app_server" {
-  for_each      = var.instances
-  ami           = var.ami
-  instance_type = each.value.instance_type
-  vpc_security_group_ids = [aws_security_group.security_group[each.value.security_name].id]
-  subnet_id = aws_subnet.vpc_east_1_subnet.id
+resource "aws_subnet" "private" {
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 3)
+  availability_zone       = data.aws_availability_zones.available.names[0]
+  vpc_id                  = aws_vpc.main.id
+  map_public_ip_on_launch = true
 
   tags = {
-    Name = "${each.value.instance_name}"
+    Name = "Private"
   }
+  depends_on = [aws_internet_gateway.gw]
+}
+
+
+
+resource "aws_subnet" "public" {
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 2)
+  availability_zone       = data.aws_availability_zones.available.names[1]
+  vpc_id                  = aws_vpc.main.id
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Public"
+  }
+}
+resource "aws_internet_gateway" "gw" {
+    vpc_id   = aws_vpc.main.id
+
+    tags = {
+        Name = "iaas_gateway"
+    }
+    depends_on = [aws_vpc.main]
+}
+resource "aws_route" "internet_access" {
+    route_table_id         = aws_vpc.main.main_route_table_id
+    destination_cidr_block = "0.0.0.0/0"
+    gateway_id             = aws_internet_gateway.gw.id  
 }

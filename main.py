@@ -50,7 +50,7 @@ while exit == False:
     print(style.CYAN + "(2)" + style.WHITE + " Criar Instância e Security Group")
     print(style.CYAN + "(3)" + style.WHITE + " Iniciar Instancia")
     print(style.CYAN + "(4)" + style.WHITE + " Parar Instancia")
-    print(style.CYAN + "(5)" + style.WHITE + " Deletar Instância e Security Group")
+    print(style.CYAN + "(5)" + style.WHITE + " Deletar Recursos")
     print(style.CYAN + "(6)" + style.WHITE + " Listar Instraestrutura")
     print(style.CYAN + "(7)" + style.WHITE + " Subir mudanças no terraform")
     print(style.CYAN + "(8)" + style.WHITE + " Sair\n")
@@ -67,7 +67,7 @@ while exit == False:
         print(style.CYAN + "(2)" + style.WHITE + " Criar Instância e Security Group")
         print(style.CYAN + "(3)" + style.WHITE + " Iniciar Instancia")
         print(style.CYAN + "(4)" + style.WHITE + " Parar Instancia")
-        print(style.CYAN + "(5)" + style.WHITE + " Deletar Instância e Security Group")
+        print(style.CYAN + "(5)" + style.WHITE + " Deletar Recursos")
         print(style.CYAN + "(6)" + style.WHITE + " Listar Instraestrutura")
         print(style.CYAN + "(7)" + style.WHITE + " Subir mudanças no terraform")
         print(style.CYAN + "(8)" + style.WHITE + " Sair\n")
@@ -94,7 +94,7 @@ while exit == False:
         functions.listar_recuros(regiao_escolhida)
         time.sleep(2)
     elif escolha == "7":
-        functions.sobe_terraform() 
+        functions.sobe_terraform(regiao_escolhida) 
         time.sleep(2)
     elif escolha == "8":
         print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")

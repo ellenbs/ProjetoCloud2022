@@ -35,8 +35,8 @@ resource "aws_iam_user_login_profile" "profile" {
   password_length         =  10   
 }
 
-resource "aws_iam_policy" "start_stop" {
-  name        = "StartStopInstances"
+resource "aws_iam_policy" "start_stop_instances" {
+  name        = "StartingStopppingInstances"
   path        = "/"
   description = "Permite user iniciar e parar instancias"
 
@@ -63,8 +63,8 @@ resource "aws_iam_policy" "start_stop" {
 }
 
 
-resource "aws_iam_policy" "change_pass" {
-  name        = "ChangePassword"
+resource "aws_iam_policy" "change_password" {
+  name        = "ChangingPassword"
   path        = "/"
   description = "Permite user trocar senha"
 
@@ -102,13 +102,13 @@ resource "aws_iam_policy" "niveis" {
 resource "aws_iam_user_policy_attachment" "attach" {
     for_each = {for user in var.aws_user_name: user.username => user}
     user       = aws_iam_user.user[each.value.username].name
-    policy_arn =  aws_iam_policy.start_stop.arn
+    policy_arn =  aws_iam_policy.start_stop_instances.arn
 }
 
 resource "aws_iam_user_policy_attachment" "attach2" {
     for_each = {for user in var.aws_user_name: user.username => user}
     user       = aws_iam_user.user[each.value.username].name
-    policy_arn       = aws_iam_policy.change_pass.arn
+    policy_arn       = aws_iam_policy.change_password.arn
 }
 
 resource "aws_iam_user_policy_attachment" "user_policy_attachment" {

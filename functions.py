@@ -59,6 +59,8 @@ def escolhe_regiao():
         print(style.CYAN + "(1)" + style.WHITE + " us-east-1")
         print(style.CYAN + "(2)" + style.WHITE + " us-west-1\n")
         decisao_regiao = input(style.RED + f"Número não aceito. " + style.CYAN + "Digite a região escolhida novamente: " + style.WHITE) 
+        time.sleep(1)   
+        
     if decisao_regiao == '1':
         region = "us-east-1"
         vpc_cidr_block = "10.0.0.0/16"
@@ -342,8 +344,9 @@ def deletar_recursos():
         print(style.CYAN + "(2)" + style.WHITE + " Security Group")
         print(style.CYAN + "(3)" + style.WHITE + " Regra de Security Group")
         print(style.CYAN + "(4)" + style.WHITE + " User")
-        decisao_deletar = input(style.RED + "Número não aceito. " + style.CYAN + "\nInsira qual deseja deletar novamente: " + style.WHITE)
-
+        decisao_deletar = input(style.RED + "\nNúmero não aceito. " + style.CYAN + "Insira qual deseja deletar novamente: " + style.WHITE)
+        time.sleep(1)
+        
     if decisao_deletar == "1":
         deletar_instancia(variaveis)
     elif decisao_deletar == "2":
@@ -355,6 +358,7 @@ def deletar_recursos():
 
 def deletar_instancia(variaveis):
     
+    print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     instancia_escolhida = input("Qual Instancia deseja deletar? ")
     print(style.WHITE + "Vamos deletar a Instancia " + style.RED + "{}".format(instancia_escolhida) + style.WHITE)
     escolha_deletar_instancia = input("Deseja continuar? (y/n) ")
@@ -373,7 +377,8 @@ def deletar_instancia(variaveis):
         print(style.MAGENTA + "\nInstancia nāo deletada..\n")
         
 def deletar_security_group(variaveis):
-    security_group_escolhida = input("\nQual Security Group deseja deletar? ")
+    print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+    security_group_escolhida = input("Qual Security Group deseja deletar? ")
     print(style.WHITE + "\nVamos deletar o Security Group " + style.RED + "{}".format(security_group_escolhida) + style.WHITE)
     escolha_deletar_security_group = input("\nDeseja continuar? (y/n) ")
 
@@ -381,14 +386,12 @@ def deletar_security_group(variaveis):
         escolha_deletar_security_group = input("\nDeseja continuar? (y/n) ")
 
     if escolha_deletar_security_group == "y":
-        size = len(variaveis["security_groups"][str(security_group_escolhida)]["ingress"])
-        print(variaveis["security_groups"][str(security_group_escolhida)]["ingress"])
-        for i in size:
-            if variaveis["security_groups"][str(security_group_escolhida)]["ingress"][size-1]["ingress"]["description"] != "Allow inbound traffic":
-                print(style.MAGENTA + "\nDeletando Security Group..\n")
-                print(variaveis["security_groups"][str(security_group_escolhida)]["ingress"])
-                variaveis["security_groups"][str(security_group_escolhida)]["ingress"].pop()
-                size -= 1
+        print(style.MAGENTA + "\nDeletando Security Group..\n")
+        lista_security_groups = len(variaveis["security_groups"])
+        for i in range(lista_security_groups):
+            if variaveis["security_groups"][str(security_group_escolhida)]["name"] == security_group_escolhida:  
+                variaveis["security_groups"].pop(security_group_escolhida)
+                i -= 1
                 escreve_variaveis(variaveis)
                 break
 
@@ -396,6 +399,8 @@ def deletar_security_group(variaveis):
         print(style.MAGENTA + "\nSecurity Group nāo deletado..\n")
         
 def deletar_regra(variaveis):
+    print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+    
     security_group_escolhida = input("Qual Security Group deseja modificar? ")
     print(style.WHITE + "Vamos modificar regras da Security Group " + style.RED 
           + "{}".format(security_group_escolhida) + style.WHITE)
@@ -408,8 +413,8 @@ def deletar_regra(variaveis):
         print(style.CYAN + "(3)" + style.WHITE + " {}".format(regras["to_port"]))
         print(style.CYAN + "(4)" + style.WHITE + " {}".format(regras["cidr_blocks"]))
         
-    regra_escolhida = input(f'Qual regra deseja deletar? \n ')
-    escolha_deletar_security_group = input("Deseja continuar? (y/n) ")
+    regra_escolhida = input(style.CYAN + "\nQual regra deseja deletar? ")
+    escolha_deletar_security_group = input("\nDeseja continuar? (y/n) ")
     while y_ou_n(escolha_deletar_security_group):
         escolha_deletar_security_group = input("Deseja continuar? (y/n) ")
     if escolha_deletar_security_group == "y":
@@ -420,8 +425,9 @@ def deletar_regra(variaveis):
         print(f"\nRegra de Security Group nāo deletada..\n")
     
 def deletar_user(aws_users):
+    print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     
-    user_escolhido = input("\nQual User deseja deletar? ")
+    user_escolhido = input("Qual User deseja deletar? ")
     print(style.WHITE + "\nVamos deletar o User " + style.RED + "{}".format(user_escolhido) + style.WHITE)
     escolha_deletar_user = input("\nDeseja continuar? (y/n) ")
 
@@ -499,8 +505,8 @@ def sobe_terraform(region):
     print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     print("Vamos subir as mudanças no Terraform")
     arquivo = f'.auto-{region}.tfvars.json'
-    os.system(f'cd users && terraform init && terraform  plan && terraform apply')
-    os.system(f'cd {region} && terraform init && terraform  plan -var-file={arquivo} && terraform apply -var-file={arquivo}')
+    os.system("cd ./aws_users && terraform init && terraform  plan && terraform apply")
+    os.system(f'cd ./{region} && terraform init && terraform  plan -var-file={arquivo} && terraform apply -var-file={arquivo}')
     
     # ------------------------------------------------------------------------ FUNCOES DE USO
 def carrega_variaveis():
