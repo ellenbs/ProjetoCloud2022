@@ -40,6 +40,9 @@ export AWS_ACCESS_KEY_ID= {ACCESS_KEY}
 export AWS_SECRET_ACCESS_KEY= {SECRET_ACCESS_KEY}
 ```
 :warning: Nunca deixe suas credenciais públicas, faça uso de variáveis de ambiente locais e do AWS CLI.
+
+Também precisaremos de uma chave pública da AWS, então na aba de Key Pairs, crie um novo par de chaves e coloque nas pastas das regiões.
+
 ----
 ## Iniciando o Projeto :grin:
 

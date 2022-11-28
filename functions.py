@@ -315,7 +315,7 @@ def cria_security_group_default(instance_name):
 def inicia_instancia(event, context, region):
     print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     print(f"Vamos Iniciar um Instância\n")
-    instances = input(f"ID da Instância: ")
+    instances = [input(f"ID da Instância: ")]
     ec2 = boto3.client('ec2', region_name=region)
     ec2.start_instances(InstanceIds=instances)
     print(style.MAGENTA + 'Iniciando as Instâncias: ' + style.WHITE+ str(instances))
@@ -517,15 +517,16 @@ def listar_recuros(region):
 def sobe_user_terraform(region):
     print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     print("Vamos subir os Users no Terraform")
-    os.system("cd ./aws_users && terraform init && terraform  plan && terraform apply")
-    print(style.RED + "Não esqueça de salvar a sua senha!")
+    os.system("cd ./aws_users && terraform init && terraform  plan && terraform apply && terraform output > user.txt")
+    print(style.RED + "Lembrando que o output foi salvo para o arquivo user.txt!")
     
 def sobe_terraform(region):
     global arquivo
     print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     print("Vamos subir as mudanças no Terraform")
     arquivo = f'.auto-{region}.tfvars.json'
-    os.system(f'cd ./{region} && terraform init && terraform  plan -var-file={arquivo} && terraform apply -var-file={arquivo}')
+    os.system(f'cd ./{region} && terraform init && terraform  plan -var-file={arquivo} && terraform apply -var-file={arquivo} && terraform output > instance.txt')
+    print(style.RED + "Lembrando que o output foi salvo para o arquivo instances.txt!")
     
 # ------------------------------------------------------------------------ FUNCOES DE USO
 
