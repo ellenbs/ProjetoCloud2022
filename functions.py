@@ -35,7 +35,7 @@ class style():
     UNDERLINE = '\033[4m'
     RESET = '\033[0m'
     
-# --------------------------------- TERRAFORM -------------------------------------------
+# --------------------------------- TERRAFORM - AWS -------------------------------------------
 
 # ------------------------------------------------------------------------ ESCOLHE REGIAO
 def escolhe_regiao():
@@ -101,7 +101,8 @@ def cria_usuario():
 
     decisao_restricoes = input(f"Gostaria de criar restrições para essse user? (y/n): ")
     while y_ou_n(decisao_restricoes):
-        decisao_restricoes = input(f"Gostaria de criar restrições para essse user? (y/n): ")
+        print(style.RED + f"\nInsira a resposta corretamente\n")
+        decisao_restricoes = input(style.WHITE + "Gostaria de criar restrições para essse user? (y/n): ")
     if decisao_restricoes == "y":
         cria_restricao()
     elif decisao_restricoes == "n":
@@ -166,8 +167,8 @@ def cria_restricao():
     print(style.CYAN + "(3)" + style.WHITE + " Descrever, Listar, Criar e Destruir")
     decisao_restricao = input(style.CYAN + "Digite a opção escolhida: " + style.WHITE)
 
-    while isNumber(decisao_restricao):
-        decisao_restricao = input(style.CYAN + "Digite a opção escolhida: " + style.WHITE)
+    while decisao_restricao != "1" and decisao_restricao != "2" and decisao_restricao != "3":
+        decisao_restricao = input(style.RED + "Número não aceito. " + style.CYAN + "Digite a opção escolhida: " + style.WHITE)
     if decisao_restricao == "1":
         aws_users["aws_user_name"].append({"username" : username, "policy_name": "ReadOnlyAccess_" + username, "policy_description": "Descrever e listar recursos", 
             "policy_action": list_describe["Action"], "policy_resource": list_describe["Resource"], "policy_effect": list_describe["Effect"]})
@@ -177,7 +178,7 @@ def cria_restricao():
             "policy_action": list_describe_create["Action"], "policy_resource": list_describe_create["Resource"], "policy_effect": list_describe_create["Effect"] })
         escreve_users(aws_users)
     elif decisao_restricao == "3":
-        aws_users["aws_user_name"].append({"username" : username, "policy_name": "ReadWriteDeleteAccess_" + username, "policy_description": "Descrever, listar, criar e destroy recursos", 
+        aws_users["aws_user_name"].append({"username" : username, "policy_name": "ReadWriteDeleteAccess_" + username, "policy_description": "Descrever, listar, criar e destruir recursos", 
             "policy_action": list_describe_create_delete["Action"], "policy_resource": list_describe_create_delete["Resource"], "policy_effect": list_describe_create_delete["Effect"] })
         escreve_users(aws_users)
 
@@ -187,13 +188,19 @@ def cria_instancia(region):
     
     print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     print(f"Vamos criar uma nova instância e Security Group\n")
-    instance_name = input("Nome da Instância: ")
+    instance_name = input("Nome da " + style.CYAN + "Instância" + style.WHITE + ": ")
     instances.append(instance_name)
     print("\nImagens Disponíveis:") 
     print(style.CYAN + "(1)" + style.WHITE + " Ubuntu Server 20.04 LTS")
     print(style.CYAN + "(2)" + style.WHITE + " Ubuntu Server 22.04 LTS\n")
-    decisao_imagem = input("Qual Imagem deseja usar? ")
+    decisao_imagem = input(style.CYAN + "Qual Imagem deseja usar? " + style.WHITE)
 
+    while decisao_imagem != "1" and decisao_imagem != "2":
+        print("\nImagens Disponíveis:") 
+        print(style.CYAN + "(1)" + style.WHITE + " Ubuntu Server 20.04 LTS")
+        print(style.CYAN + "(2)" + style.WHITE + " Ubuntu Server 22.04 LTS\n")
+        decisao_imagem = input(style.CYAN + "Qual Imagem deseja usar? ")
+        
     if decisao_imagem == "1" and region == "us-east-1":
         instance_image = "ami-0149b2da6ceec4bb0"
     elif decisao_imagem == "2" and region == "us-east-1":
@@ -203,18 +210,16 @@ def cria_instancia(region):
     elif decisao_imagem == "2" and region == "us-west-1":
         instance_image = "ami-02ea247e531eb3ce6"
     
-    instance_tipo = input("\nTipos de Instâncias\n" + style.CYAN + "(1)" + style.WHITE + " t2.micro"
+    decisao_tipo = input("\nTipos de Instâncias\n" + style.CYAN + "(1)" + style.WHITE + " t2.micro"
                          + style.CYAN + "\n(2)" + style.WHITE + " t2.nano\n\nTipo: ")
-    boolean_tipo = False
-    while boolean_tipo == False:
-        if instance_tipo == '1':
-            instance_type = "t2.micro"
-            boolean_tipo = True
-        elif instance_tipo == '2':
-            instance_type = "t2.nano"
-            boolean_tipo = True
-        else:
-            instance_tipo = int(input("\nTipo não encontrado.\n(1) t2.micro]\n(2) t2.nano]\n\nInsira novamente: "))
+    
+    while decisao_tipo != "1" and decisao_tipo != "2":
+        decisao_tipo = input("\nTipos de Instâncias\n" + style.CYAN + "(1)" + style.WHITE + " t2.micro"
+        + style.CYAN + "\n(2)" + style.WHITE + " t2.nano\n\nTipo: ")
+    if decisao_tipo == '1':
+        instance_type = "t2.micro"
+    elif decisao_tipo == '2':
+        instance_type = "t2.nano"
 
     variaveis["instances"].update({str(instance_name) : {"image_id" : str(instance_image), "instance_type" : str(instance_type)}})
     escreve_variaveis(variaveis)   
@@ -226,21 +231,23 @@ def cria_instancia(region):
     if security_group == "y":
         cria_security_group(instance_name)
     elif security_group == "n":
-        print(f"Vamos utilizar o modo default")
+        print(style.MAGENTA + "\nVamos utilizar o modo default")
         cria_security_group_default(instance_name)
         
 # ------------------------------------------------------------------------ CRIA SECURITY GROUP
         
 def cria_security_group(instance_name):
     
-    lista_group_name = []
+    print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
     
     print("\nVamos Criar Grupos de Segurança\n")
 
-    security_group_name = input(f"Nome do Security Group: ")
+    security_group_name = input(f"Nome do " + style.CYAN + "Security Group: ")
 
-    n_rules = int(input(f"\nQuantas regras deseja? "))
-
+    n_rules = int(input("\nQuantas regras deseja criar? "))
+    while n_rules.isnotDigit():
+        n_rules = int(input(style.RED + "\nInsira um número. " + style.WHITE + "Quantas regras deseja criar? "))
+           
     dict_standard_rule = {"ingress" : {"description" : "Allow inbound traffic", \
                         "from_port" : 0, \
                         "to_port" : 0, \
@@ -278,6 +285,7 @@ def cria_security_group(instance_name):
         print("Vamos linkar a security group com a Instancia")
         variaveis["security_group_instances"].update({instance_name : {"security_names" : security_group_name}})
 
+    print(style.MAGENTA + "\nCriando Security Group..\n")
     escreve_variaveis(variaveis)
 
 def cria_security_group_default(instance_name):
@@ -310,7 +318,7 @@ def inicia_instancia(event, context, region):
     instances = input(f"ID da Instância: ")
     ec2 = boto3.client('ec2', region_name=region)
     ec2.start_instances(InstanceIds=instances)
-    print('Iniciando as Instâncias: ' + str(instances))
+    print(style.MAGENTA + 'Iniciando as Instâncias: ' + style.WHITE+ str(instances))
 
 # ------------------------------------------------------------------------ PARA INSTANCIA
 
@@ -320,7 +328,7 @@ def para_instancia(event, context, region):
     instances = [input("ID da Instância: ")]
     ec2 = boto3.client('ec2', region_name=region)
     ec2.stop_instances(InstanceIds=instances)
-    print('Instancia parada: ' + str(instances))
+    print(style.MAGENTA + 'Parando Instancia: ' + style.WHITE + str(instances))
 
 # ------------------------------------------------------------------------ DELETA RECURSOS
 
@@ -367,10 +375,10 @@ def deletar_instancia(variaveis):
         print(style.WHITE + "Vamos deletar a Instancia " + style.RED + "{}".format(instancia_escolhida) + style.WHITE)
         escolha_deletar_instancia = input("Deseja continuar? (y/n) ")
     if escolha_deletar_instancia == "y":
-        print(style.MAGENTA + "\nDeletando Instancia..\n")
         variaveis["instances"].pop(str(instancia_escolhida))
         for chave in variaveis["security_group_instances"].copy():
             if instancia_escolhida == chave:
+                print(style.MAGENTA + "\nDeletando Instancia..\n")
                 del variaveis["security_group_instances"][str(instancia_escolhida)]
         escreve_variaveis(variaveis)
     elif escolha_deletar_instancia == "n":
@@ -406,7 +414,7 @@ def deletar_regra(variaveis):
           + "{}".format(security_group_escolhida) + style.WHITE)
     
     for i in range(len(variaveis["security_groups"][str(security_group_escolhida)]["ingress"])):
-        regras = variaveis["sec_groups"][str(security_group_escolhida)]["ingress"][i]["ingress"]
+        regras = variaveis["security_groups"][str(security_group_escolhida)]["ingress"][i]["ingress"]
         print(style.CYAN + "(0)" + style.WHITE + " {}".format(regras["description"]))
         print(style.CYAN + "(1)" + style.WHITE + " {}".format(regras["protocol"]))
         print(style.CYAN + "(2)" + style.WHITE + " {}".format(regras["from_port"]))
@@ -414,15 +422,15 @@ def deletar_regra(variaveis):
         print(style.CYAN + "(4)" + style.WHITE + " {}".format(regras["cidr_blocks"]))
         
     regra_escolhida = input(style.CYAN + "\nQual regra deseja deletar? ")
-    escolha_deletar_security_group = input("\nDeseja continuar? (y/n) ")
+    escolha_deletar_security_group = input(style.WHITE + "\nDeseja continuar? (y/n) ")
     while y_ou_n(escolha_deletar_security_group):
         escolha_deletar_security_group = input("Deseja continuar? (y/n) ")
     if escolha_deletar_security_group == "y":
-        print("\nDeletando Regra..\n")
+        print(style.MAGENTA + "\nDeletando Regra..\n")
         variaveis["security_groups"][str(security_group_escolhida)]["ingress"].pop(int(regra_escolhida))
         escreve_variaveis(variaveis)
     elif escolha_deletar_security_group == "n":
-        print(f"\nRegra de Security Group nāo deletada..\n")
+        print(style.MAGENTA + "\nRegra de Security Group nāo deletada..\n")
     
 def deletar_user(aws_users):
     print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
@@ -446,7 +454,9 @@ def deletar_user(aws_users):
         escreve_users(aws_users)
 
     elif escolha_deletar_user == "n":
-        print(f"\nUser nāo deletado..\n")
+        print(style.MAGENTA + "\nUser nāo deletado..\n")
+
+# ------------------------------------------------------------------------ LISTA RECURSOS
 
 def listar_recuros(region):
     
@@ -464,17 +474,18 @@ def listar_recuros(region):
     print(style.CYAN + "(1)" + style.WHITE + " Instâncias")
     print(style.CYAN + "(2)" + style.WHITE + " Security Groups e Regras")
     print(style.CYAN + "(3)" + style.WHITE + " Users")
-    escolha_listar = input(style.CYAN + "\nO que deseja lista?r: " + style.WHITE)
+    escolha_listar = input(style.CYAN + "\nO que deseja listar?: " + style.WHITE)
 
     while escolha_listar != "1" and escolha_listar !="2" and escolha_listar != "3":
         print("Podemos listar os seguintes recursos:")
         print(style.CYAN + "(1)" + style.WHITE + " Instâncias")
         print(style.CYAN + "(2)" + style.WHITE + " Security Groups e Regras")
         print(style.CYAN + "(3)" + style.WHITE + " Users")
-        escolha_listar = input(style.CYAN + "\nO que deseja lista?r: " + style.WHITE)
+        escolha_listar = input(style.CYAN + "\nO que deseja listar?: " + style.WHITE)
         
     if escolha_listar == "1":
-        print("\nInstancias:\n")
+        print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+        print("Instancias:\n")
         for each in ec2re.instances.all():
             print(f"\nId: " + each.id + " " + 
                    "\nName: " + each.tags[0]["Value"] + " " + 
@@ -483,8 +494,16 @@ def listar_recuros(region):
                    "\nRegion: "+  each.placement['AvailabilityZone'] + "\n " + f"")
             
     elif escolha_listar == "2":
-        print("\n")
-        print(f"Users: " )
+        print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+        print(f"Security Groups e Regras:\n" )
+        for each in ec2re.security_groups.all():
+            print(f"Name: " + each.group_name + "\n")
+            for rule in each.ip_permissions:
+                print(f"Rule: " + str(rule) + "\n")
+                     
+    elif escolha_listar == "3":
+        print("\n" + style.CYAN + "*"*100 + style.WHITE + "\n")
+        print(f"Users:\n" )
         for user in ec2iam.list_users()['Users']:
             print("User: {0} \ Id: {1} \ Arn: {2}\n".format(
                 user['UserName'],
@@ -492,13 +511,9 @@ def listar_recuros(region):
                 user['Arn'],
                 )
             )
-    elif escolha_listar == "3":
-        print("\n")
-        print(f"Security Groups e Regras: " )
-        for each in ec2re.security_groups.all():
-            print(f"Name: " + each.group_name + "\n")
-            for rule in each.ip_permissions:
-                print(f"Rule: " + str(rule) + "\n")
+    
+
+# ------------------------------------------------------------------------ MUDANCAS TERRAFORM
 
 def sobe_terraform(region):
     global arquivo
@@ -508,7 +523,8 @@ def sobe_terraform(region):
     os.system("cd ./aws_users && terraform init && terraform  plan && terraform apply")
     os.system(f'cd ./{region} && terraform init && terraform  plan -var-file={arquivo} && terraform apply -var-file={arquivo}')
     
-    # ------------------------------------------------------------------------ FUNCOES DE USO
+# ------------------------------------------------------------------------ FUNCOES DE USO
+
 def carrega_variaveis():
     doc = f'{region}/.auto-{region}.tfvars.json'
     with open(doc, 'r') as json_file:
@@ -537,5 +553,4 @@ def y_ou_n(resposta):
     if resposta == "y"  or resposta == "n":
         return False
     else:
-        print(style.RED + f"Insira a resposta corretamente\n")
         return True
